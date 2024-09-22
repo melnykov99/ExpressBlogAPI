@@ -1,14 +1,19 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import dotenv from "dotenv";
+import blogsRouter from "./routes/blogs";
+import postsRouter from "./routes/posts";
 
 dotenv.config();
 const app = express();
-
 const PORT = process.env.PORT;
 
-app.get("/", (req: Request, res: Response) => {
-    res.status(200).send("hello");
-});
+app.use('/blogs', blogsRouter);
+app.use('/posts', postsRouter);
+
+// route for tests, deletes all data from db
+app.delete('/testing/all-data', (req, res) => {
+
+})
 
 app.listen(PORT, () => {
     console.log(`app listening on port ${PORT}`)
