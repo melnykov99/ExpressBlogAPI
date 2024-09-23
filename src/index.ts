@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import blogsRouter from "./routes/blogs";
 import postsRouter from "./routes/posts";
+import {runMongoDB} from "./db";
 
 dotenv.config();
 const app = express();
@@ -16,5 +17,6 @@ app.delete('/testing/all-data', (req, res) => {
 })
 
 app.listen(PORT, () => {
-    console.log(`app listening on port ${PORT}`)
+    runMongoDB().catch(console.dir);
+    console.log(`app listening on port ${PORT}`);
 })
