@@ -1,12 +1,16 @@
-import {Router, Request, Response} from "express";
+import {Request, Response, Router} from "express";
 import blogsService from "../services/blogs"
-import HTTP from "../common/constants/HTTP_CODES";
 import {BlogInputModel, BlogOutputModel} from "../types/blogs";
+import {HTTP, REPOSITORY} from "../types/constants";
 
 const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const foundBlogs: BlogOutputModel[] = await blogsService.getBlogs();
+    const foundBlogs: BlogOutputModel[] | REPOSITORY.ERROR = await blogsService.getBlogs();
+    if (foundBlogs === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.SERVER_ERROR);
+        return;
+    }
     res.status(HTTP.OK).send(foundBlogs);
 });
 blogsRouter.post('/', async (req, res) => {

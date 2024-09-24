@@ -16,4 +16,4 @@ async function runMongoDB() {
     }
 }
 
-export { runMongoDB, db };
+export {runMongoDB, db};

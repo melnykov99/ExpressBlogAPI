@@ -2,24 +2,23 @@ import express from "express";
 import dotenv from "dotenv";
 import blogsRouter from "./routes/blogs";
 import postsRouter from "./routes/posts";
+import testingRouter from "./routes/testing";
 import {runMongoDB} from "./db/configMongoDB";
 import bodyParser from "body-parser";
 
 dotenv.config();
-const jsonBodyMiddleware = bodyParser.json();
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT: string = process.env.PORT!;
 
+const jsonBodyMiddleware = bodyParser.json();
 app.use(jsonBodyMiddleware);
 
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
 
 // route for tests, deletes all data from db
-app.delete('/testing/all-data', (req, res) => {
-
-})
+app.use('/testing/all-data', testingRouter);
 
 const startApp = async () => {
     runMongoDB().catch(console.dir);

@@ -1,6 +1,7 @@
 import blogsRepository from "../repositories/blogs"
 import {BlogInputModel, BlogOutputModel} from "../types/blogs";
-async function getBlogs(): Promise<BlogOutputModel[]> {
+import {REPOSITORY} from "../types/constants";
+async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {
     return await blogsRepository.getBlogs();
 }
 async function createBlog(newBlog: BlogInputModel) {
