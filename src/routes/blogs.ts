@@ -1,15 +1,17 @@
-import {Router} from "express";
+import {Router, Request, Response} from "express";
 import blogsService from "../services/blogs"
 import HTTP from "../common/constants/HTTP_CODES";
+import {BlogInputModel, BlogOutputModel} from "../types/blogs";
 
 const blogsRouter = Router();
 
-blogsRouter.get('/', async (req, res) => {
-    const foundBlogs = await blogsService.getBlogs();
+blogsRouter.get('/', async (req: Request, res: Response) => {
+    const foundBlogs: BlogOutputModel[] = await blogsService.getBlogs();
     res.status(HTTP.OK).send(foundBlogs);
 });
 blogsRouter.post('/', async (req, res) => {
-    const createdBlog = await blogsService.createBlog();
+    const newBlog: BlogInputModel = req.body;
+    const createdBlog = await blogsService.createBlog(newBlog);
     res.status(HTTP.CREATED).send(createdBlog);
 });
 blogsRouter.get('/:id', async (req, res) => {

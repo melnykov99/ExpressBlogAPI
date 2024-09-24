@@ -2,11 +2,16 @@ import express from "express";
 import dotenv from "dotenv";
 import blogsRouter from "./routes/blogs";
 import postsRouter from "./routes/posts";
-import {runMongoDB} from "./db";
+import {runMongoDB} from "./db/configMongoDB";
+import bodyParser from "body-parser";
 
 dotenv.config();
+const jsonBodyMiddleware = bodyParser.json();
+
 const app = express();
 const PORT = process.env.PORT;
+
+app.use(jsonBodyMiddleware);
 
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
@@ -16,7 +21,10 @@ app.delete('/testing/all-data', (req, res) => {
 
 })
 
-app.listen(PORT, () => {
+const startApp = async () => {
     runMongoDB().catch(console.dir);
-    console.log(`app listening on port ${PORT}`);
-})
+    app.listen(PORT, () => {
+        console.log(`app listening on port ${PORT}`);
+    })
+}
+startApp().catch(console.dir);

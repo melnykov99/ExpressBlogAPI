@@ -1,9 +1,10 @@
 import blogsRepository from "../repositories/blogs"
-async function getBlogs() {
+import {BlogInputModel, BlogOutputModel} from "../types/blogs";
+async function getBlogs(): Promise<BlogOutputModel[]> {
     return await blogsRepository.getBlogs();
 }
-async function createBlog() {
-    return await blogsRepository.createBlog();
+async function createBlog(newBlog: BlogInputModel) {
+    return await blogsRepository.createBlog(newBlog);
 }
 async function getBlogById(blogId: string) {
     return await blogsRepository.getBlogById(blogId);
