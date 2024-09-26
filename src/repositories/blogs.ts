@@ -1,6 +1,7 @@
 import {blogsCollection} from "../db/collectionsMongoDB";
-import {BlogOutputModel} from "../types/blogs";
+import {BlogDBModel, BlogOutputModel} from "../types/blogs";
 import {REPOSITORY} from "../types/constants";
+import {InsertOneResult} from "mongodb";
 
 async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {
     try {
@@ -10,8 +11,16 @@ async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {
     }
 }
 
-async function createBlog(newBlog: any) {
-    await blogsCollection.insertOne(newBlog);
+async function createBlog(newBlog: BlogOutputModel): Promise<BlogDBModel | REPOSITORY.ERROR> {
+    try {
+        const result: InsertOneResult<BlogDBModel> = await blogsCollection.insertOne(newBlog as BlogDBModel);
+        return {
+            _id: result.insertedId.toString(),
+            ...newBlog
+        };
+    } catch (error) {
+        return REPOSITORY.ERROR;
+    }
 }
 
 async function getBlogById(blogId: string) {

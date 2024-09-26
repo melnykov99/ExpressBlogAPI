@@ -11,14 +11,8 @@ type BlogOutputModel = {
     createdAt: string,
     isMembership: boolean,
 }
-type BlogDBModel = {
+type BlogDBModel = BlogOutputModel & {
     _id: string,
-    id: string,
-    name: string,
-    description: string,
-    websiteUrl: string,
-    createdAt: string,
-    isMembership: boolean,
 }
 
 export {BlogInputModel, BlogOutputModel, BlogDBModel}

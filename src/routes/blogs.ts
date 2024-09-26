@@ -14,9 +14,17 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
     res.status(HTTP.OK).send(foundBlogs);
 });
 blogsRouter.post('/', async (req, res) => {
-    const newBlog: BlogInputModel = req.body;
-    const createdBlog = await blogsService.createBlog(newBlog);
-    res.status(HTTP.CREATED).send(createdBlog);
+    const blogInput: BlogInputModel = {
+        name: req.body.name,
+        description: req.body.description,
+        websiteUrl: req.body.websiteUrl,
+    }
+    const createResult: BlogOutputModel | REPOSITORY.ERROR = await blogsService.createBlog(blogInput);
+    if (createResult === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.SERVER_ERROR);
+        return;
+    }
+    res.status(HTTP.CREATED).send(createResult);
 });
 blogsRouter.get('/:id', async (req, res) => {
     const blogId: string = req.params.id;
