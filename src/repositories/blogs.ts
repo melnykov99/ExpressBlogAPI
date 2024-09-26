@@ -1,7 +1,7 @@
 import {blogsCollection} from "../db/collectionsMongoDB";
 import {BlogDBModel, BlogOutputModel} from "../types/blogs";
 import {REPOSITORY} from "../types/constants";
-import {InsertOneResult} from "mongodb";
+import {InsertOneResult, WithId} from "mongodb";
 
 async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {
     try {
@@ -24,7 +24,15 @@ async function createBlog(newBlog: BlogOutputModel): Promise<BlogDBModel | REPOS
 }
 
 async function getBlogById(blogId: string) {
-
+    try {
+        const foundBlog: WithId<BlogDBModel> | null = await blogsCollection.findOne({id: blogId}, {projection: {_id: 0}});
+        if (foundBlog === null) {
+            return REPOSITORY.NOT_FOUND;
+        }
+        return foundBlog
+    } catch (error) {
+        return REPOSITORY.ERROR
+    }
 }
 
 async function updateBlog(blogId: string) {

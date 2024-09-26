@@ -28,7 +28,15 @@ blogsRouter.post('/', async (req, res) => {
 });
 blogsRouter.get('/:id', async (req, res) => {
     const blogId: string = req.params.id;
-    const foundBlog = await blogsService.getBlogById(blogId);
+    const foundBlog: BlogOutputModel | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR = await blogsService.getBlogById(blogId);
+    if (foundBlog === REPOSITORY.NOT_FOUND) {
+        res.sendStatus(HTTP.NOT_FOUND);
+        return;
+    }
+    if (foundBlog === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.SERVER_ERROR);
+        return;
+    }
     res.status(HTTP.OK).send(foundBlog);
 });
 blogsRouter.put('/:id', async (req, res) => {

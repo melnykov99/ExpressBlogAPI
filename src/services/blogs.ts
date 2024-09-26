@@ -7,7 +7,7 @@ async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {
     return await blogsRepository.getBlogs();
 }
 
-async function createBlog(blogInput: BlogInputModel) {
+async function createBlog(blogInput: BlogInputModel): Promise<BlogOutputModel | REPOSITORY.ERROR> {
     const newBlog: BlogOutputModel = {
         id: randomUUID(),
         name: blogInput.name,
@@ -24,7 +24,7 @@ async function createBlog(blogInput: BlogInputModel) {
     return blogWithoutMongoId;
 }
 
-async function getBlogById(blogId: string) {
+async function getBlogById(blogId: string): Promise<BlogOutputModel | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR> {
     return await blogsRepository.getBlogById(blogId);
 }
 

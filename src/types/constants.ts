@@ -11,6 +11,7 @@ enum HTTP {
 enum REPOSITORY {
     SUCCESSFULLY = "SUCCESSFULLY",
     ERROR = "ERROR",
+    NOT_FOUND = "NOT_FOUND",
 }
 
 export {HTTP, REPOSITORY}
