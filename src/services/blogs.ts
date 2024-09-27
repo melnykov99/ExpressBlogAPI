@@ -28,11 +28,11 @@ async function getBlogById(blogId: string): Promise<BlogOutputModel | REPOSITORY
     return await blogsRepository.getBlogById(blogId);
 }
 
-async function updateBlog(blogId: string) {
-    return await blogsRepository.updateBlog(blogId);
+async function updateBlog(blogId: string, blogInput: BlogInputModel): Promise<REPOSITORY> {
+    return await blogsRepository.updateBlog(blogId, blogInput);
 }
 
-async function deleteBlog(blogId: string) {
+async function deleteBlog(blogId: string): Promise<REPOSITORY> {
     return await blogsRepository.deleteBlog(blogId);
 }
 

@@ -41,12 +41,33 @@ blogsRouter.get('/:id', async (req, res) => {
 });
 blogsRouter.put('/:id', async (req, res) => {
     const blogId: string = req.params.id;
-    const updateResult = await blogsService.updateBlog(blogId);
+    const blogInput: BlogInputModel = {
+        name: req.body.name,
+        description: req.body.description,
+        websiteUrl: req.body.websiteUrl,
+    }
+    const updateResult: REPOSITORY = await blogsService.updateBlog(blogId, blogInput);
+    if (updateResult === REPOSITORY.NOT_FOUND) {
+        res.sendStatus(HTTP.NOT_FOUND);
+        return;
+    }
+    if (updateResult === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.SERVER_ERROR);
+        return;
+    }
     res.sendStatus(HTTP.NO_CONTENT);
 });
 blogsRouter.delete('/:id', async (req, res) => {
     const blogId: string = req.params.id;
-    const deleteResult = await blogsService.deleteBlog(blogId);
+    const deleteResult: REPOSITORY = await blogsService.deleteBlog(blogId);
+    if (deleteResult === REPOSITORY.NOT_FOUND) {
+        res.sendStatus(HTTP.NOT_FOUND);
+        return;
+    }
+    if (deleteResult === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.SERVER_ERROR);
+        return;
+    }
     res.sendStatus(HTTP.NO_CONTENT);
 });
 
