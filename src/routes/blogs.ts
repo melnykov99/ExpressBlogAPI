@@ -3,10 +3,12 @@ import blogsService from "../services/blogs"
 import {BlogInputModel, BlogOutputModel} from "../types/blogs";
 import {HTTP, REPOSITORY} from "../types/constants";
 import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "../types/request";
+import {basicAuth} from "../middlewares/auth/basic";
 
 const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response<BlogOutputModel[]>) => {
+    console.log(req.headers.authorization);
     const foundBlogs: BlogOutputModel[] | REPOSITORY.ERROR = await blogsService.getBlogs();
     if (foundBlogs === REPOSITORY.ERROR) {
         res.sendStatus(HTTP.SERVER_ERROR);
@@ -14,7 +16,7 @@ blogsRouter.get('/', async (req: Request, res: Response<BlogOutputModel[]>) => {
     }
     res.status(HTTP.OK).send(foundBlogs);
 });
-blogsRouter.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response<BlogOutputModel>) => {
+blogsRouter.post('/', basicAuth, async (req: RequestWithBody<BlogInputModel>, res: Response<BlogOutputModel>) => {
     const blogInput: BlogInputModel = {
         name: req.body.name,
         description: req.body.description,
@@ -40,7 +42,7 @@ blogsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response<B
     }
     res.status(HTTP.OK).send(foundBlog);
 });
-blogsRouter.put('/:id', async (req: RequestWithParamsAndBody<ParamsId, BlogInputModel>, res: Response) => {
+blogsRouter.put('/:id', basicAuth, async (req: RequestWithParamsAndBody<ParamsId, BlogInputModel>, res: Response) => {
     const blogId: string = req.params.id;
     const blogInput: BlogInputModel = {
         name: req.body.name,
@@ -58,7 +60,7 @@ blogsRouter.put('/:id', async (req: RequestWithParamsAndBody<ParamsId, BlogInput
     }
     res.sendStatus(HTTP.NO_CONTENT);
 });
-blogsRouter.delete('/:id', async (req: RequestWithParams<ParamsId>, res: Response) => {
+blogsRouter.delete('/:id', basicAuth, async (req: RequestWithParams<ParamsId>, res: Response) => {
     const blogId: string = req.params.id;
     const deleteResult: REPOSITORY = await blogsService.deleteBlog(blogId);
     if (deleteResult === REPOSITORY.NOT_FOUND) {
