@@ -6,7 +6,7 @@ import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} 
 
 const blogsRouter = Router();
 
-blogsRouter.get('/', async (req: Request, res: Response) => {
+blogsRouter.get('/', async (req: Request, res: Response<BlogOutputModel[]>) => {
     const foundBlogs: BlogOutputModel[] | REPOSITORY.ERROR = await blogsService.getBlogs();
     if (foundBlogs === REPOSITORY.ERROR) {
         res.sendStatus(HTTP.SERVER_ERROR);
@@ -14,7 +14,7 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
     }
     res.status(HTTP.OK).send(foundBlogs);
 });
-blogsRouter.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response) => {
+blogsRouter.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response<BlogOutputModel>) => {
     const blogInput: BlogInputModel = {
         name: req.body.name,
         description: req.body.description,
@@ -27,7 +27,7 @@ blogsRouter.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response
     }
     res.status(HTTP.CREATED).send(createResult);
 });
-blogsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response) => {
+blogsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response<BlogOutputModel>) => {
     const blogId: string = req.params.id;
     const foundBlog: BlogOutputModel | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR = await blogsService.getBlogById(blogId);
     if (foundBlog === REPOSITORY.NOT_FOUND) {
