@@ -2,6 +2,7 @@ import {Request, Response, Router} from "express";
 import blogsService from "../services/blogs"
 import {BlogInputModel, BlogOutputModel} from "../types/blogs";
 import {HTTP, REPOSITORY} from "../types/constants";
+import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "../types/request";
 
 const blogsRouter = Router();
 
@@ -13,7 +14,7 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
     }
     res.status(HTTP.OK).send(foundBlogs);
 });
-blogsRouter.post('/', async (req, res) => {
+blogsRouter.post('/', async (req: RequestWithBody<BlogInputModel>, res: Response) => {
     const blogInput: BlogInputModel = {
         name: req.body.name,
         description: req.body.description,
@@ -26,7 +27,7 @@ blogsRouter.post('/', async (req, res) => {
     }
     res.status(HTTP.CREATED).send(createResult);
 });
-blogsRouter.get('/:id', async (req, res) => {
+blogsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response) => {
     const blogId: string = req.params.id;
     const foundBlog: BlogOutputModel | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR = await blogsService.getBlogById(blogId);
     if (foundBlog === REPOSITORY.NOT_FOUND) {
@@ -39,7 +40,7 @@ blogsRouter.get('/:id', async (req, res) => {
     }
     res.status(HTTP.OK).send(foundBlog);
 });
-blogsRouter.put('/:id', async (req, res) => {
+blogsRouter.put('/:id', async (req: RequestWithParamsAndBody<ParamsId, BlogInputModel>, res: Response) => {
     const blogId: string = req.params.id;
     const blogInput: BlogInputModel = {
         name: req.body.name,
@@ -57,7 +58,7 @@ blogsRouter.put('/:id', async (req, res) => {
     }
     res.sendStatus(HTTP.NO_CONTENT);
 });
-blogsRouter.delete('/:id', async (req, res) => {
+blogsRouter.delete('/:id', async (req: RequestWithParams<ParamsId>, res: Response) => {
     const blogId: string = req.params.id;
     const deleteResult: REPOSITORY = await blogsService.deleteBlog(blogId);
     if (deleteResult === REPOSITORY.NOT_FOUND) {
