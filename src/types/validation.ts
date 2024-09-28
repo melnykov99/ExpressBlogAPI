@@ -19,19 +19,6 @@ type BlogErrorMessages = {
     descriptionLength: string,
     websiteUrlLength: string,
 }
-//
-enum BlogFields {
-    Name = "name",
-    Description = "description",
-    WebsiteUrl = "websiteUrl",
-}
-
-enum PostFields {
-    Title = "title",
-    ShortDescription = "shortDescription",
-    Content = "content",
-    BlogId = "blogId",
-}
 // constants
 type BlogConstants = {
     nameMaxLength: number,
@@ -39,4 +26,4 @@ type BlogConstants = {
     websiteUrlMaxLength: number,
 }
 
-export {ErrorMessage, ErrorsMessagesOutput, BlogFields, PostFields, CommonErrorMessages, BlogErrorMessages, BlogConstants}
+export {ErrorMessage, ErrorsMessagesOutput, CommonErrorMessages, BlogErrorMessages, BlogConstants}
