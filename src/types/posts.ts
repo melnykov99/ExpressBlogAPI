@@ -4,6 +4,9 @@ type PostInputModel = {
     content: string,
     blogId: string,
 }
+type UpdatedPostData = PostInputModel & {
+    blogName: string,
+}
 type PostOutputModel = {
     id: string,
     title: string,
@@ -13,15 +16,8 @@ type PostOutputModel = {
     blogName: string,
     createdAt: string,
 }
-type PostDBModel = {
+type PostDBModel = PostOutputModel & {
     _id: string,
-    id: string,
-    title: string,
-    shortDescription: string,
-    content: string,
-    blogId: string,
-    blogName: string,
-    createdAt: string,
 }
 
-export {PostInputModel, PostOutputModel, PostDBModel}
+export {PostInputModel, PostOutputModel, PostDBModel, UpdatedPostData}

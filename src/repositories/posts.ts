@@ -1,7 +1,7 @@
 import {REPOSITORY} from "../common/constants";
 import {postsCollection} from "../db/collectionsMongoDB";
-import {PostDBModel, PostOutputModel} from "../types/posts";
-import {DeleteResult, InsertOneResult, WithId} from "mongodb";
+import {PostDBModel, PostOutputModel, UpdatedPostData} from "../types/posts";
+import {DeleteResult, InsertOneResult, UpdateResult, WithId} from "mongodb";
 
 async function getPosts(): Promise<PostOutputModel[] | REPOSITORY.ERROR> {
     try {
@@ -35,8 +35,24 @@ async function getPostById(postId: string): Promise<PostDBModel | REPOSITORY.NOT
     }
 }
 
-async function updatePost(postId: string) {
-
+async function updatePost(postId: string, updatedPostData: UpdatedPostData): Promise<REPOSITORY> {
+    try {
+        const updateResult: UpdateResult<PostDBModel> = await postsCollection.updateOne({id: postId}, {
+            $set: {
+                title: updatedPostData.title,
+                shortDescription: updatedPostData.shortDescription,
+                content: updatedPostData.shortDescription,
+                blogId: updatedPostData.blogId,
+                blogName: updatedPostData.blogName,
+            }
+        });
+        if (updateResult.matchedCount === 0) {
+            return REPOSITORY.NOT_FOUND;
+        }
+        return REPOSITORY.SUCCESSFULLY
+    } catch (error) {
+        return REPOSITORY.ERROR;
+    }
 }
 
 async function deletePost(postId: string): Promise<REPOSITORY> {

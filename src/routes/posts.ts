@@ -2,7 +2,8 @@ import {Request, Response, Router} from "express";
 import postsService from "../services/posts"
 import {HTTP, REPOSITORY} from "../common/constants";
 import {PostInputModel, PostOutputModel} from "../types/posts";
-import {ParamsId, RequestWithBody, RequestWithParams} from "../types/request";
+import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "../types/request";
+import {basicAuth} from "../middlewares/auth/basic";
 
 const postsRouter = Router();
 
@@ -14,7 +15,7 @@ postsRouter.get('/', async (req: Request, res: Response<PostOutputModel[]>) => {
     }
     res.status(HTTP.OK).send(foundPosts);
 });
-postsRouter.post('/', async (req: RequestWithBody<PostInputModel>, res: Response<PostOutputModel>) => {
+postsRouter.post('/', basicAuth, async (req: RequestWithBody<PostInputModel>, res: Response<PostOutputModel>) => {
     const postInput: PostInputModel = {
         title: req.body.title,
         shortDescription: req.body.shortDescription,
@@ -46,12 +47,26 @@ postsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response<P
     }
     res.status(HTTP.OK).send(foundPost);
 });
-postsRouter.put('/:id', async (req, res) => {
+postsRouter.put('/:id', basicAuth, async (req: RequestWithParamsAndBody<ParamsId, PostInputModel>, res: Response) => {
     const postId: string = req.params.id;
-    const updateResult = await postsService.updatePost(postId);
+    const postInput: PostInputModel = {
+        title: req.body.title,
+        shortDescription: req.body.shortDescription,
+        content: req.body.content,
+        blogId: req.body.blogId,
+    }
+    const updateResult: REPOSITORY = await postsService.updatePost(postId, postInput);
+    if (updateResult === REPOSITORY.NOT_FOUND) {
+        res.sendStatus(HTTP.NOT_FOUND);
+        return;
+    }
+    if (updateResult === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.NOT_FOUND);
+        return;
+    }
     res.sendStatus(HTTP.NO_CONTENT);
 });
-postsRouter.delete('/:id', async (req: RequestWithParams<ParamsId>, res: Response) => {
+postsRouter.delete('/:id', basicAuth, async (req: RequestWithParams<ParamsId>, res: Response) => {
     const postId: string = req.params.id;
     const deleteResult: REPOSITORY = await postsService.deletePost(postId);
     if (deleteResult === REPOSITORY.NOT_FOUND) {

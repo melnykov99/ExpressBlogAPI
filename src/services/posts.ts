@@ -1,5 +1,5 @@
 import postsRepository from "../repositories/posts";
-import {PostDBModel, PostInputModel, PostOutputModel} from "../types/posts";
+import {PostDBModel, PostInputModel, PostOutputModel, UpdatedPostData} from "../types/posts";
 import {REPOSITORY} from "../common/constants";
 import {randomUUID} from "crypto";
 import blogsService from "./blogs";
@@ -21,7 +21,7 @@ async function createPost(postInput: PostInputModel): Promise<PostOutputModel | 
         shortDescription: postInput.shortDescription,
         content: postInput.content,
         blogId: postInput.blogId,
-        blogName: foundBlog.id,
+        blogName: foundBlog.name,
         createdAt: new Date().toISOString(),
     }
     const createdPost: PostDBModel | REPOSITORY.ERROR = await postsRepository.createPost(newPost);
@@ -36,8 +36,16 @@ async function getPostById(postId: string): Promise<PostOutputModel | REPOSITORY
     return await postsRepository.getPostById(postId);
 }
 
-async function updatePost(postId: string) {
-    return await postsRepository.updatePost(postId);
+async function updatePost(postId: string, postInput: PostInputModel): Promise<REPOSITORY> {
+    const foundBlog: BlogOutputModel | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR = await blogsService.getBlogById(postInput.blogId);
+    if (foundBlog === REPOSITORY.NOT_FOUND || foundBlog === REPOSITORY.ERROR) {
+        return foundBlog;
+    }
+    const updatedPostData: UpdatedPostData = {
+        ...postInput,
+        blogName: foundBlog.name,
+    }
+    return await postsRepository.updatePost(postId, updatedPostData);
 }
 
 async function deletePost(postId: string): Promise<REPOSITORY> {

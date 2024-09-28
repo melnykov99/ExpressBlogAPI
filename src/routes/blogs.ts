@@ -10,7 +10,6 @@ import {validationHandler} from "../validation/validationHandler";
 const blogsRouter = Router();
 
 blogsRouter.get('/', async (req: Request, res: Response<BlogOutputModel[]>) => {
-    console.log(req.headers.authorization);
     const foundBlogs: BlogOutputModel[] | REPOSITORY.ERROR = await blogsService.getBlogs();
     if (foundBlogs === REPOSITORY.ERROR) {
         res.sendStatus(HTTP.SERVER_ERROR);
