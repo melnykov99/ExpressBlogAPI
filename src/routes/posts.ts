@@ -1,6 +1,6 @@
 import {Router} from "express";
 import postsService from "../services/posts"
-import {HTTP} from "../types/constants";
+import {HTTP} from "../common/constants";
 
 const postsRouter = Router();
 

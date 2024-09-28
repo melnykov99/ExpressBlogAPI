@@ -1,9 +1,11 @@
 import {Request, Response, Router} from "express";
 import blogsService from "../services/blogs"
 import {BlogInputModel, BlogOutputModel} from "../types/blogs";
-import {HTTP, REPOSITORY} from "../types/constants";
+import {HTTP, REPOSITORY} from "../common/constants";
 import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "../types/request";
 import {basicAuth} from "../middlewares/auth/basic";
+import {blogsValidationRules} from "../validation/rules/blogs";
+import {validationHandler} from "../validation/validationHandler";
 
 const blogsRouter = Router();
 
@@ -16,7 +18,7 @@ blogsRouter.get('/', async (req: Request, res: Response<BlogOutputModel[]>) => {
     }
     res.status(HTTP.OK).send(foundBlogs);
 });
-blogsRouter.post('/', basicAuth, async (req: RequestWithBody<BlogInputModel>, res: Response<BlogOutputModel>) => {
+blogsRouter.post('/', basicAuth, blogsValidationRules, validationHandler, async (req: RequestWithBody<BlogInputModel>, res: Response<BlogOutputModel>) => {
     const blogInput: BlogInputModel = {
         name: req.body.name,
         description: req.body.description,

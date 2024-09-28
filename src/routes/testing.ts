@@ -1,6 +1,6 @@
 import {Router, Request, Response} from "express";
 import deleteAllDataFromMongoDB from "../repositories/testing";
-import {HTTP, REPOSITORY} from "../types/constants";
+import {HTTP, REPOSITORY} from "../common/constants";
 
 // route for tests, deletes all data from db
 const testingRouter = Router();

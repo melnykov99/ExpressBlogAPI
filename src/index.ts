@@ -11,8 +11,7 @@ dotenv.config();
 const app = express();
 const PORT: string = process.env.PORT!;
 
-const jsonBodyMiddleware = bodyParser.json();
-app.use(jsonBodyMiddleware);
+app.use(bodyParser.json());
 
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);

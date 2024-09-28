@@ -1,6 +1,6 @@
 import blogsRepository from "../repositories/blogs"
 import {BlogDBModel, BlogInputModel, BlogOutputModel} from "../types/blogs";
-import {REPOSITORY} from "../types/constants";
+import {REPOSITORY} from "../common/constants";
 import {randomUUID} from "crypto";
 
 async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {

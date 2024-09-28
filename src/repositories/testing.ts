@@ -1,5 +1,5 @@
 import {blogsCollection, postsCollection} from "../db/collectionsMongoDB";
-import {REPOSITORY} from "../types/constants";
+import {REPOSITORY} from "../common/constants";
 
 async function deleteAllDataFromMongoDB(): Promise<string> {
     try {

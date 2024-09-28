@@ -1,6 +1,6 @@
 import {blogsCollection} from "../db/collectionsMongoDB";
 import {BlogDBModel, BlogInputModel, BlogOutputModel} from "../types/blogs";
-import {REPOSITORY} from "../types/constants";
+import {REPOSITORY} from "../common/constants";
 import {DeleteResult, InsertOneResult, UpdateResult, WithId} from "mongodb";
 
 async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {
