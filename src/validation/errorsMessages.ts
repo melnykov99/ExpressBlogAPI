@@ -1,5 +1,5 @@
-import {blog} from "./constants";
-import {BlogErrorMessages, CommonErrorMessages} from "../types/validation";
+import {blog, post} from "./constants";
+import {BlogErrorMessages, CommonErrorMessages, PostErrorMessages} from "../types/validation";
 
 const commonErrorMessages: CommonErrorMessages = {
     notEmpty: "field should not be empty",
@@ -10,7 +10,12 @@ const commonErrorMessages: CommonErrorMessages = {
 const blogErrorMessages: BlogErrorMessages = {
     nameLength:  `length field should not exceed ${blog.nameMaxLength} characters`,
     descriptionLength: `length field should not exceed ${blog.descriptionMaxLength} characters`,
-    websiteUrlLength:  `length field should not exceed ${blog.websiteUrlMaxLength} characters`
+    websiteUrlLength:  `length field should not exceed ${blog.websiteUrlMaxLength} characters`,
+}
+const postErrorMessages: PostErrorMessages = {
+    titleLength: `length field should not exceed ${post.titleMaxLength} characters`,
+    shortDescriptionLength: `length field should not exceed ${post.shortDescriptionMaxLength} characters`,
+    contentLength: `length field should not exceed ${post.contentMaxLength} characters`,
 }
 
-export {commonErrorMessages, blogErrorMessages}
+export {commonErrorMessages, blogErrorMessages, postErrorMessages}

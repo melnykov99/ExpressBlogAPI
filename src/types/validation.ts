@@ -19,11 +19,21 @@ type BlogErrorMessages = {
     descriptionLength: string,
     websiteUrlLength: string,
 }
+type PostErrorMessages = {
+    titleLength: string,
+    shortDescriptionLength: string,
+    contentLength: string,
+}
 // constants
 type BlogConstants = {
     nameMaxLength: number,
     descriptionMaxLength: number,
     websiteUrlMaxLength: number,
 }
+type PostConstants = {
+    titleMaxLength: number,
+    shortDescriptionMaxLength: number,
+    contentMaxLength: number,
+}
 
-export {ErrorMessage, ErrorsMessagesOutput, CommonErrorMessages, BlogErrorMessages, BlogConstants}
+export {ErrorMessage, ErrorsMessagesOutput, CommonErrorMessages, BlogErrorMessages, BlogConstants, PostConstants, PostErrorMessages}

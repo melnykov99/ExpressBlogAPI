@@ -4,6 +4,8 @@ import {HTTP, REPOSITORY} from "../common/constants";
 import {PostInputModel, PostOutputModel} from "../types/posts";
 import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} from "../types/request";
 import {basicAuth} from "../middlewares/auth/basic";
+import {postsValidationRules} from "../validation/rules/posts";
+import {validationHandler} from "../validation/validationHandler";
 
 const postsRouter = Router();
 
@@ -15,7 +17,7 @@ postsRouter.get('/', async (req: Request, res: Response<PostOutputModel[]>) => {
     }
     res.status(HTTP.OK).send(foundPosts);
 });
-postsRouter.post('/', basicAuth, async (req: RequestWithBody<PostInputModel>, res: Response<PostOutputModel>) => {
+postsRouter.post('/', basicAuth, postsValidationRules, validationHandler, async (req: RequestWithBody<PostInputModel>, res: Response<PostOutputModel>) => {
     const postInput: PostInputModel = {
         title: req.body.title,
         shortDescription: req.body.shortDescription,
@@ -47,7 +49,7 @@ postsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response<P
     }
     res.status(HTTP.OK).send(foundPost);
 });
-postsRouter.put('/:id', basicAuth, async (req: RequestWithParamsAndBody<ParamsId, PostInputModel>, res: Response) => {
+postsRouter.put('/:id', basicAuth, postsValidationRules, validationHandler, async (req: RequestWithParamsAndBody<ParamsId, PostInputModel>, res: Response) => {
     const postId: string = req.params.id;
     const postInput: PostInputModel = {
         title: req.body.title,
