@@ -15,8 +15,6 @@ app.use(bodyParser.json());
 
 app.use('/blogs', blogsRouter);
 app.use('/posts', postsRouter);
-
-// route for tests, deletes all data from db
 app.use('/testing/all-data', testingRouter);
 
 const startApp = async () => {

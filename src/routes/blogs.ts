@@ -44,7 +44,7 @@ blogsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response<B
     }
     res.status(HTTP.OK).send(foundBlog);
 });
-blogsRouter.put('/:id', basicAuth, async (req: RequestWithParamsAndBody<ParamsId, BlogInputModel>, res: Response) => {
+blogsRouter.put('/:id', basicAuth, blogsValidationRules, validationHandler, async (req: RequestWithParamsAndBody<ParamsId, BlogInputModel>, res: Response) => {
     const blogId: string = req.params.id;
     const blogInput: BlogInputModel = {
         name: req.body.name,
