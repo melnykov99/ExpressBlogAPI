@@ -13,9 +13,9 @@ async function getBlogs(): Promise<BlogOutputModel[] | REPOSITORY.ERROR> {
 
 async function createBlog(newBlog: BlogOutputModel): Promise<BlogDBModel | REPOSITORY.ERROR> {
     try {
-        const result: InsertOneResult<BlogDBModel> = await blogsCollection.insertOne(newBlog as BlogDBModel);
+        const createResult: InsertOneResult<BlogDBModel> = await blogsCollection.insertOne(newBlog as BlogDBModel);
         return {
-            _id: result.insertedId.toString(),
+            _id: createResult.insertedId.toString(),
             ...newBlog
         };
     } catch (error) {
