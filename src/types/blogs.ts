@@ -3,11 +3,8 @@ type BlogInputModel = {
     description: string,
     websiteUrl: string,
 }
-type BlogOutputModel = {
+type BlogOutputModel = BlogInputModel & {
     id: string,
-    name: string,
-    description: string,
-    websiteUrl: string,
     createdAt: string,
     isMembership: boolean,
 }

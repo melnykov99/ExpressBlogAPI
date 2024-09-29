@@ -24,3 +24,5 @@ const startApp = async () => {
     })
 }
 startApp().catch(console.dir);
+
+export {app};

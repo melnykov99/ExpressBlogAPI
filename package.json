@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -w",
     "start": "nodemon dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --forceExit"
   },
   "repository": {
     "type": "git",
@@ -26,10 +26,15 @@
     "express": "^4.21.0",
     "express-validator": "^7.2.0",
     "mongodb": "^6.9.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.6.2"
+    "supertest": "^7.0.0",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "@types/jest": "^29.5.13",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.7",
+    "ts-jest": "^29.2.5",
+    "typescript": "^5.6.2"
   }
 }

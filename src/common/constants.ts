@@ -13,5 +13,6 @@ enum REPOSITORY {
     ERROR = "ERROR",
     NOT_FOUND = "NOT_FOUND",
 }
+const BASIC_AUTH: string = "Basic YWRtaW46cXdlcnR5";
 
-export {HTTP, REPOSITORY}
+export {HTTP, REPOSITORY, BASIC_AUTH}

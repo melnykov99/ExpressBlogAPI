@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction} from "express";
-import {HTTP} from "../../common/constants";
+import {BASIC_AUTH, HTTP} from "../../common/constants";
 
 function basicAuth(req: Request, res: Response, next: NextFunction) {
-    if (req.headers.authorization !== 'Basic YWRtaW46cXdlcnR5') {
+    if (req.headers.authorization !== BASIC_AUTH) {
         res.sendStatus(HTTP.UNAUTHORIZED);
         return
     }
