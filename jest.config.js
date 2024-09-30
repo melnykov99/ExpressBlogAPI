@@ -4,4 +4,6 @@ module.exports = {
   transform: {
     "^.+.tsx?$": ["ts-jest",{}],
   },
+  maxConcurrency: 1,
+  testTimeout: 10000,
 };

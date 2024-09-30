@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -w",
     "start": "nodemon dist/index.js",
-    "test": "jest --forceExit"
+    "test": "jest --runInBand --forceExit"
   },
   "repository": {
     "type": "git",

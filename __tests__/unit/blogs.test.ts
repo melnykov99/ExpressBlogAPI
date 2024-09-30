@@ -213,15 +213,34 @@ describe('blogs routes', () => {
 
             expect(response.status).toBe(404);
         });
-        it('should return status 204 if the blog was successfully deleted', async () => {
+        it('should return status 204 if the blog was successfully deleted and verify deletion', async () => {
             const existingBlogId: string = randomUUID();
+            const existingBlog: BlogOutputModel = {
+                id: randomUUID(),
+                name: 'test blog',
+                description: 'test description blog',
+                websiteUrl: 'https://www.example.com/',
+                createdAt: new Date().toISOString(),
+                isMembership: false,
+            };
+            (blogsService.getBlogById as jest.Mock).mockResolvedValue(existingBlog);
+            let response = await request(app).get(`/blogs/${existingBlogId}`);
+            expect(response.status).toBe(200);
+            expect(response.body).toEqual(existingBlog);
+
+
             (blogsService.deleteBlog as jest.Mock).mockResolvedValue(REPOSITORY.SUCCESSFULLY);
 
-            const response = await request(app)
+            response = await request(app)
                 .delete(`/blogs/${existingBlogId}`)
                 .set('Authorization', BASIC_AUTH);
 
             expect(response.status).toBe(204);
+
+            (blogsService.getBlogById as jest.Mock).mockResolvedValueOnce(REPOSITORY.NOT_FOUND);
+
+            response = await request(app).get(`/blogs/${existingBlogId}`);
+            expect(response.status).toBe(404);
         });
         it('should return status 500 if DB return error', async () => {
             const blogId: string = randomUUID();
