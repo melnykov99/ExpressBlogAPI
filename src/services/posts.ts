@@ -37,8 +37,10 @@ async function getPostById(postId: string): Promise<PostOutputModel | REPOSITORY
 }
 
 async function updatePost(postId: string, postInput: PostInputModel): Promise<REPOSITORY> {
+    console.log('hello')
     const foundBlog: BlogOutputModel | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR = await blogsService.getBlogById(postInput.blogId);
     if (foundBlog === REPOSITORY.NOT_FOUND || foundBlog === REPOSITORY.ERROR) {
+        console.log('here')
         return foundBlog;
     }
     const updatedPostData: UpdatedPostData = {

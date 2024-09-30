@@ -44,7 +44,7 @@ postsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response<P
         return;
     }
     if (foundPost === REPOSITORY.ERROR) {
-        res.sendStatus(HTTP.NOT_FOUND);
+        res.sendStatus(HTTP.SERVER_ERROR);
         return;
     }
     res.status(HTTP.OK).send(foundPost);
@@ -63,7 +63,7 @@ postsRouter.put('/:id', basicAuth, postsValidationRules, validationHandler, asyn
         return;
     }
     if (updateResult === REPOSITORY.ERROR) {
-        res.sendStatus(HTTP.NOT_FOUND);
+        res.sendStatus(HTTP.SERVER_ERROR);
         return;
     }
     res.sendStatus(HTTP.NO_CONTENT);

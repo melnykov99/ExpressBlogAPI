@@ -12,6 +12,7 @@ async function runMongoDB() {
         await client.connect();
         console.log('MongoDB successfully connected')
     } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
         await client.close();
     }
 }

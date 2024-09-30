@@ -5,11 +5,13 @@ import postsRouter from "./routes/posts";
 import testingRouter from "./routes/testing";
 import {runMongoDB} from "./db/configMongoDB";
 import bodyParser from "body-parser";
+import {Server} from "http";
 
 dotenv.config();
 
 const app = express();
 const PORT: string = process.env.PORT!;
+let server: Server;
 
 app.use(bodyParser.json());
 
@@ -18,11 +20,15 @@ app.use('/posts', postsRouter);
 app.use('/testing/all-data', testingRouter);
 
 const startApp = async () => {
-    runMongoDB().catch(console.dir);
-    app.listen(PORT, () => {
-        console.log(`app listening on port ${PORT}`);
-    })
+    try {
+        await runMongoDB();
+        server = app.listen(PORT, () => {
+            console.log(`App listening on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error('Failed to start app:', error);
+    }
 }
-startApp().catch(console.dir);
+startApp().catch(console.error);
 
-export {app};
+export {startApp, app};
