@@ -31,4 +31,4 @@ const startApp = async () => {
 }
 startApp().catch(console.error);
 
-export {startApp, app};
+export {app};

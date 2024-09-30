@@ -1,4 +1,4 @@
-import request from 'supertest';
+import request = require('supertest');
 import {app} from "../../src";
 import blogsService from "../../src/services/blogs"
 import {BlogInputModel, BlogOutputModel} from "../../src/types/blogs";

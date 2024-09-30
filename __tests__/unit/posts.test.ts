@@ -1,7 +1,7 @@
-import request from 'supertest';
-import {app} from "../../src";
+import request = require('supertest');
 import postsService from "../../src/services/posts";
 import blogsService from "../../src/services/blogs";
+import {app} from "../../src";
 import {PostInputModel, PostOutputModel} from "../../src/types/posts";
 import {randomUUID} from "crypto";
 import {BASIC_AUTH, REPOSITORY} from "../../src/common/constants";
