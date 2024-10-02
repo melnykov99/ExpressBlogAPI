@@ -4,7 +4,7 @@ import blogsRouter from "./routes/blogs";
 import postsRouter from "./routes/posts";
 import testingRouter from "./routes/testing";
 import {runMongoDB} from "./db/configMongoDB";
-import bodyParser from "body-parser";
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
