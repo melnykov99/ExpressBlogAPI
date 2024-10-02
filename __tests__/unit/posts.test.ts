@@ -65,7 +65,7 @@ describe('posts routes', () => {
                     createdAt: new Date().toISOString()
                 },
             ];
-            (postsService.getPosts as jest.Mock).mockResolvedValue(mockPosts);
+            (postsService.getPosts as jest.Mock).mockReturnValue(mockPosts);
 
             const response = await request(app).get('/posts');
 
@@ -73,7 +73,7 @@ describe('posts routes', () => {
             expect(response.body).toEqual(mockPosts);
         });
         it('should return status 500 if DB return error', async () => {
-            (postsService.getPosts as jest.Mock).mockResolvedValue(REPOSITORY.ERROR);
+            (postsService.getPosts as jest.Mock).mockReturnValue(REPOSITORY.ERROR);
 
             const response = await request(app)
                 .get(`/posts`)
@@ -89,7 +89,7 @@ describe('posts routes', () => {
                 .set('Authorization', BASIC_AUTH)
                 .send(mockBlogInput);
         })
-        it('should create a new post, return status 201 and created post', async () => {
+        it('should create a new post, return status 201 and created post, and retrieve it by ID', async () => {
             (postsService.createPost as jest.Mock).mockResolvedValue(mockPostOutput);
 
             const response = await request(app)
@@ -99,6 +99,14 @@ describe('posts routes', () => {
 
             expect(response.status).toBe(201);
             expect(response.body).toEqual(mockPostOutput);
+
+            (postsService.getPostById as jest.Mock).mockResolvedValue(mockPostOutput);
+
+            const getResponse = await request(app)
+                .get(`/posts/${mockPostOutput.id}`)
+
+            expect(getResponse.status).toBe(200);
+            expect(getResponse.body).toEqual(mockPostOutput);
         });
         it('should return status 500 if DB return error', async () => {
             (postsService.createPost as jest.Mock).mockResolvedValue(REPOSITORY.ERROR);

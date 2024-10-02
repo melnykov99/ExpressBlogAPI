@@ -12,6 +12,19 @@ describe('blogs routes', () => {
     afterEach(() => {
         jest.resetAllMocks();
     });
+    const mockBlogInput: BlogInputModel = {
+        name: 'test blog',
+        description: 'test description blog',
+        websiteUrl: 'https://www.example.com/',
+    };
+    const mockBlogOutput: BlogOutputModel = {
+        id: randomUUID(),
+        name: mockBlogInput.name,
+        description: mockBlogInput.description,
+        websiteUrl: mockBlogInput.websiteUrl,
+        createdAt: new Date().toISOString(),
+        isMembership: false,
+    };
     describe('GET /blogs', () => {
         it('should return status 200 and list of blogs', async () => {
             const mockBlogs: BlogOutputModel[] = [
@@ -50,43 +63,33 @@ describe('blogs routes', () => {
     });
     describe('POST /blogs', () => {
         it('should create a new blog, return status 201 and created blog', async () => {
-            const newBlogInput: BlogInputModel = {
-                name: 'test blog',
-                description: 'test description blog',
-                websiteUrl: 'https://www.example.com/',
-            };
 
-            const newBlogOutput: BlogOutputModel = {
-                id: randomUUID(),
-                name: newBlogInput.name,
-                description: newBlogInput.description,
-                websiteUrl: newBlogInput.websiteUrl,
-                createdAt: new Date().toISOString(),
-                isMembership: false,
-            };
-
-            (blogsService.createBlog as jest.Mock).mockResolvedValue(newBlogOutput);
+            (blogsService.createBlog as jest.Mock).mockResolvedValue(mockBlogOutput);
 
             const response = await request(app)
                 .post('/blogs')
                 .set('Authorization', BASIC_AUTH)
-                .send(newBlogInput);
+                .send(mockBlogOutput);
 
             expect(response.status).toBe(201);
-            expect(response.body).toEqual(newBlogOutput);
+            expect(response.body).toEqual(mockBlogOutput);
+
+            (blogsService.getBlogById as jest.Mock).mockResolvedValue(mockBlogOutput);
+
+            const getResponse = await request(app)
+                .get(`/blogs/${mockBlogOutput.id}`)
+                .set('Authorization', BASIC_AUTH);
+
+            expect(getResponse.status).toBe(200);
+            expect(getResponse.body).toEqual(mockBlogOutput);
         });
         it('should return status 500 if DB return error', async () => {
-            const newBlogInput: BlogInputModel = {
-                name: 'test blog',
-                description: 'test description blog',
-                websiteUrl: 'https://www.example.com/',
-            };
             (blogsService.createBlog as jest.Mock).mockResolvedValue(REPOSITORY.ERROR);
 
             const response = await request(app)
                 .post(`/blogs/`)
                 .set('Authorization', BASIC_AUTH)
-                .send(newBlogInput)
+                .send(mockBlogInput)
 
             expect(response.status).toBe(500);
         });
@@ -103,22 +106,14 @@ describe('blogs routes', () => {
             expect(response.status).toBe(404);
         });
         it('should return status 200 and the blog if it exists', async () => {
-            const existingBlog: BlogOutputModel = {
-                id: randomUUID(),
-                name: 'Existing Blog',
-                description: 'This blog exists.',
-                websiteUrl: 'https://www.example.com',
-                createdAt: new Date().toISOString(),
-                isMembership: false,
-            };
 
-            (blogsService.getBlogById as jest.Mock).mockResolvedValue(existingBlog);
+            (blogsService.getBlogById as jest.Mock).mockResolvedValue(mockBlogOutput);
 
             const response = await request(app)
-                .get(`/blogs/${existingBlog.id}`)
+                .get(`/blogs/${mockBlogOutput.id}`)
 
             expect(response.status).toBe(200);
-            expect(response.body).toEqual(existingBlog);
+            expect(response.body).toEqual(mockBlogOutput);
         });
         it('should return status 500 if DB return error', async () => {
             const blogId: string = randomUUID();
@@ -214,32 +209,23 @@ describe('blogs routes', () => {
             expect(response.status).toBe(404);
         });
         it('should return status 204 if the blog was successfully deleted and verify deletion', async () => {
-            const existingBlogId: string = randomUUID();
-            const existingBlog: BlogOutputModel = {
-                id: randomUUID(),
-                name: 'test blog',
-                description: 'test description blog',
-                websiteUrl: 'https://www.example.com/',
-                createdAt: new Date().toISOString(),
-                isMembership: false,
-            };
-            (blogsService.getBlogById as jest.Mock).mockResolvedValue(existingBlog);
-            let response = await request(app).get(`/blogs/${existingBlogId}`);
+            (blogsService.getBlogById as jest.Mock).mockResolvedValue(mockBlogOutput);
+            let response = await request(app).get(`/blogs/${mockBlogOutput.id}`);
             expect(response.status).toBe(200);
-            expect(response.body).toEqual(existingBlog);
+            expect(response.body).toEqual(mockBlogOutput);
 
 
             (blogsService.deleteBlog as jest.Mock).mockResolvedValue(REPOSITORY.SUCCESSFULLY);
 
             response = await request(app)
-                .delete(`/blogs/${existingBlogId}`)
+                .delete(`/blogs/${mockBlogOutput.id}`)
                 .set('Authorization', BASIC_AUTH);
 
             expect(response.status).toBe(204);
 
             (blogsService.getBlogById as jest.Mock).mockResolvedValueOnce(REPOSITORY.NOT_FOUND);
 
-            response = await request(app).get(`/blogs/${existingBlogId}`);
+            response = await request(app).get(`/blogs/${mockBlogOutput.id}`);
             expect(response.status).toBe(404);
         });
         it('should return status 500 if DB return error', async () => {
