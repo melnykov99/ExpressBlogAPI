@@ -5,13 +5,11 @@ import postsRouter from "./routes/posts";
 import testingRouter from "./routes/testing";
 import {runMongoDB} from "./db/configMongoDB";
 import bodyParser from "body-parser";
-import {Server} from "http";
 
 dotenv.config();
 
 const app = express();
 const PORT: string = process.env.PORT!;
-let server: Server;
 
 app.use(bodyParser.json());
 
@@ -22,7 +20,7 @@ app.use('/testing/all-data', testingRouter);
 const startApp = async () => {
     try {
         await runMongoDB();
-        server = app.listen(PORT, () => {
+         app.listen(PORT, () => {
             console.log(`App listening on port ${PORT}`);
         });
     } catch (error) {
