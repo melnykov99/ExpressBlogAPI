@@ -67,10 +67,19 @@ async function deletePost(postId: string): Promise<REPOSITORY> {
     }
 }
 
+async function getPostsByBlogId(blogId: string): Promise<PostOutputModel[] | REPOSITORY.ERROR> {
+    try {
+        return await postsCollection.find({blogId: blogId}, {projection: {_id: 0}}).toArray();
+    } catch (error) {
+        return REPOSITORY.ERROR
+    }
+}
+
 export default {
     getPosts,
     createPost,
     getPostById,
     updatePost,
     deletePost,
+    getPostsByBlogId,
 }

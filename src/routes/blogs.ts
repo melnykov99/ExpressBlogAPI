@@ -6,6 +6,7 @@ import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} 
 import {basicAuth} from "../middlewares/auth/basic";
 import {blogsValidationRules} from "../validation/rules/blogs";
 import {validationHandler} from "../validation/validationHandler";
+import {PostOutputModel} from "../types/posts";
 
 const blogsRouter = Router();
 
@@ -74,5 +75,19 @@ blogsRouter.delete('/:id', basicAuth, async (req: RequestWithParams<ParamsId>, r
     }
     res.sendStatus(HTTP.NO_CONTENT);
 });
+
+blogsRouter.get('/:id/posts', async (req: RequestWithParams<ParamsId>, res: Response<PostOutputModel[]>) => {
+    const blogId: string = req.params.id;
+    const foundPosts: PostOutputModel[] | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR = await blogsService.getPostsByBlogId(blogId);
+    if (foundPosts === REPOSITORY.NOT_FOUND) {
+        res.sendStatus(HTTP.NOT_FOUND);
+        return;
+    }
+    if (foundPosts === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.SERVER_ERROR);
+        return;
+    }
+    res.status(HTTP.OK).send(foundPosts);
+})
 
 export default blogsRouter;

@@ -52,10 +52,15 @@ async function deletePost(postId: string): Promise<REPOSITORY> {
     return await postsRepository.deletePost(postId);
 }
 
+async function getPostsByBlogId(blogId: string): Promise<PostOutputModel[] | REPOSITORY.ERROR> {
+    return postsRepository.getPostsByBlogId(blogId);
+}
+
 export default {
     getPosts,
     createPost,
     getPostById,
     updatePost,
     deletePost,
+    getPostsByBlogId,
 }
