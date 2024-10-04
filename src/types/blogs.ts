@@ -11,5 +11,12 @@ type BlogOutputModel = BlogInputModel & {
 type BlogDBModel = BlogOutputModel & {
     _id: string,
 }
+type BlogsResponseModel = {
+    pagesCount: number,
+    page: number,
+    pageSize: number,
+    totalCount: number,
+    items: BlogOutputModel[],
+}
 
-export {BlogInputModel, BlogOutputModel, BlogDBModel}
+export {BlogInputModel, BlogOutputModel, BlogDBModel, BlogsResponseModel}

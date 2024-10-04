@@ -17,5 +17,12 @@ type PostOutputModel = PostInputModel & {
 type PostDBModel = PostOutputModel & {
     _id: string,
 }
+type PostsResponseModel = {
+    pagesCount: number,
+    page: number,
+    pageSize: number,
+    totalCount: number,
+    items: PostOutputModel[],
+}
 
-export {PostInputModel, PostOutputModel, PostDBModel, UpdatedPostData, CreatePostByBlogIdInputModel}
+export {PostInputModel, PostOutputModel, PostDBModel, UpdatedPostData, CreatePostByBlogIdInputModel, PostsResponseModel}
