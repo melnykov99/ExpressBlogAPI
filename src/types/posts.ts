@@ -1,7 +1,9 @@
-type PostInputModel = {
+type CreatePostByBlogIdInputModel = {
     title: string,
     shortDescription: string,
     content: string,
+}
+type PostInputModel = CreatePostByBlogIdInputModel & {
     blogId: string,
 }
 type UpdatedPostData = PostInputModel & {
@@ -16,4 +18,4 @@ type PostDBModel = PostOutputModel & {
     _id: string,
 }
 
-export {PostInputModel, PostOutputModel, PostDBModel, UpdatedPostData}
+export {PostInputModel, PostOutputModel, PostDBModel, UpdatedPostData, CreatePostByBlogIdInputModel}

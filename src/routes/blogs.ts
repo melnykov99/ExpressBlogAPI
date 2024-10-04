@@ -6,7 +6,8 @@ import {ParamsId, RequestWithBody, RequestWithParams, RequestWithParamsAndBody} 
 import {basicAuth} from "../middlewares/auth/basic";
 import {blogsValidationRules} from "../validation/rules/blogs";
 import {validationHandler} from "../validation/validationHandler";
-import {PostOutputModel} from "../types/posts";
+import {CreatePostByBlogIdInputModel, PostOutputModel} from "../types/posts";
+import {createPostByBlogIdValidation} from "../validation/rules/posts";
 
 const blogsRouter = Router();
 
@@ -24,12 +25,12 @@ blogsRouter.post('/', basicAuth, blogsValidationRules, validationHandler, async 
         description: req.body.description,
         websiteUrl: req.body.websiteUrl,
     }
-    const createResult: BlogOutputModel | REPOSITORY.ERROR = await blogsService.createBlog(blogInput);
-    if (createResult === REPOSITORY.ERROR) {
+    const createdBlog: BlogOutputModel | REPOSITORY.ERROR = await blogsService.createBlog(blogInput);
+    if (createdBlog === REPOSITORY.ERROR) {
         res.sendStatus(HTTP.SERVER_ERROR);
         return;
     }
-    res.status(HTTP.CREATED).send(createResult);
+    res.status(HTTP.CREATED).send(createdBlog);
 });
 blogsRouter.get('/:id', async (req: RequestWithParams<ParamsId>, res: Response<BlogOutputModel>) => {
     const blogId: string = req.params.id;
@@ -88,6 +89,26 @@ blogsRouter.get('/:id/posts', async (req: RequestWithParams<ParamsId>, res: Resp
         return;
     }
     res.status(HTTP.OK).send(foundPosts);
+})
+
+blogsRouter.post('/:id/posts', basicAuth, createPostByBlogIdValidation, validationHandler, async (req: RequestWithParamsAndBody<ParamsId, CreatePostByBlogIdInputModel>, res: Response<PostOutputModel>) => {
+    const blogId: string = req.params.id;
+    const postInput: CreatePostByBlogIdInputModel = {
+        title: req.body.title,
+        shortDescription: req.body.shortDescription,
+        content: req.body.content,
+    }
+    const createdPost: PostOutputModel | REPOSITORY.NOT_FOUND | REPOSITORY.ERROR = await blogsService.createPostByBlogId(blogId, postInput);
+    if (createdPost === REPOSITORY.NOT_FOUND) {
+        res.sendStatus(HTTP.NOT_FOUND);
+        return
+    }
+    if (createdPost === REPOSITORY.ERROR) {
+        res.sendStatus(HTTP.SERVER_ERROR);
+        return
+    }
+    res.status(HTTP.CREATED).send(createdPost)
+
 })
 
 export default blogsRouter;

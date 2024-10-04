@@ -29,4 +29,20 @@ const postsValidationRules: ValidationChain[] = [
             }
         })
 ]
-export {postsValidationRules}
+
+const createPostByBlogIdValidation: ValidationChain[] = [
+    body('title')
+        .isString().withMessage(commonErrorMessages.isString).bail()
+        .trim().notEmpty().withMessage(commonErrorMessages.notEmpty).bail()
+        .isLength({max: post.titleMaxLength}).withMessage(postErrorMessages.titleLength),
+    body('shortDescription')
+        .isString().withMessage(commonErrorMessages.isString).bail()
+        .trim().notEmpty().withMessage(commonErrorMessages.notEmpty).bail()
+        .isLength({max: post.shortDescriptionMaxLength}).withMessage(postErrorMessages.shortDescriptionLength),
+    body('content')
+        .isString().withMessage(commonErrorMessages.isString).bail()
+        .trim().notEmpty().withMessage(commonErrorMessages.notEmpty).bail()
+        .isLength({max: post.contentMaxLength}).withMessage(postErrorMessages.contentLength),
+]
+
+export {postsValidationRules, createPostByBlogIdValidation}

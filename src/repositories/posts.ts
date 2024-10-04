@@ -13,9 +13,9 @@ async function getPosts(): Promise<PostOutputModel[] | REPOSITORY.ERROR> {
 
 async function createPost(newPost: PostOutputModel): Promise<PostDBModel | REPOSITORY.ERROR> {
     try {
-        const result: InsertOneResult<PostDBModel> = await postsCollection.insertOne(newPost as PostDBModel)
+        const createResult: InsertOneResult<PostDBModel> = await postsCollection.insertOne(newPost as PostDBModel)
         return {
-            _id: result.insertedId.toString(),
+            _id: createResult.insertedId.toString(),
             ...newPost
         };
     } catch (error) {
